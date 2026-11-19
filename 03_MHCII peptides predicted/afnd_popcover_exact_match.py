@@ -16,11 +16,11 @@ from pathlib import Path
 from urllib.parse import urlencode
 
 QUERY_ALLELES = [
-    'DRB1_0101', 'DRB1_0301', 'DRB1_0401',
-    'HLA-DPA10103-DPB10201', 'HLA-DPA10103-DPB10301',
-    'HLA-DPA10103-DPB10401', 'HLA-DQA10102-DQB10501',
-    'HLA-DQA10103-DQB10301', 'HLA-DQA10401-DQB10301',
+    'DRB1_1101', 'DRB1_1501', 'HLA-DQA10103-DQB10301',
+    'HLA-DQA10201-DQB10202', 'HLA-DQA10401-DQB10301',
+    'HLA-DQA10501-DQB10201',
 ]
+
 BASE = 'https://www.allelefrequencies.net/api/hla/allele-frequencies/search'
 DATA_DIR = Path('afnd_downloads')
 OUTPUT_FILE = Path('popcover_allele_frequencies.txt')

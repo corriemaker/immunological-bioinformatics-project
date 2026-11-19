@@ -1,0 +1,86 @@
+-- Selected options --
+Number of epitopes to select 	5
+Length of peptides to extract from protein sequences 	15
+Number of peptide sets to select 	1
+Offset for denominator in score function 	0.01
+Minimum genomic coverage to include peptide 	0.0
+Use protein sequence input 	True
+Substract min. genomic coverage in score function denominator 	False
+MHC I binder data without binding cores 	True
+MHC II binder data without binding cores 	False
+Use phenotype frequencies for calculation 	True
+Skip dataset reduction 	False
+Method of peptide selection 	popcover
+Require nested class I binder in selected peptides 	False
+Require nested class II binder in selected peptides 	False
+Use IEDB method for calculating coverage 	False
+
+Got 6 alleles from allele frequency list
+Got 412 unique 15-mer peptides from input protein sequences
+Skipped 26 lines due to these HLAs not in allele frequency:
+DRB1_0301 DRB1_0401 DRB1_0701
+
+-- MHC binder data --
+Got 6 alleles
+Got 2 genotypes
+
+Got 31 unique 15-mer peptides with nested HLA binders
+
+Hobohm 1 dataset reduction yielded 10 peptides, down from 31
+
+HLA: DRB1_1101 DRB1_1501 HLA-DQA10103-DQB10301 HLA-DQA10201-DQB10202 HLA-DQA10401-DQB10301 HLA-DQA10501-DQB10201
+
+Genotypes: 4G3Y_1_Chain 4G3Y_2_Chain
+
+-- Peptide Set 1 --
+Selected TSGVHTFPAVLQSSG
+HLA: 0 1 0 0 0 0
+Genotype: 0 1
+# HLA: 1 # Geno: 1 # HLA+Genotype combo coverage: 1/12 = 0.08333
+
+Selected SPRLLIKYASESMSG
+HLA: 0 2 0 0 0 0
+Genotype: 1 1
+# HLA: 1 # Geno: 2 # HLA+Genotype combo coverage: 2/12 = 0.16667
+
+Selected EKGLEWVAEIRSKSI
+HLA: 1 2 0 0 0 0
+Genotype: 1 2
+# HLA: 2 # Geno: 2 # HLA+Genotype combo coverage: 3/12 = 0.25000
+
+Selected YEKHKVYACEVTHQG
+HLA: 1 2 0 1 1 1
+Genotype: 2 2
+# HLA: 5 # Geno: 2 # HLA+Genotype combo coverage: 6/12 = 0.50000
+
+Selected KLEESGGGLVQPGGS
+HLA: 1 2 1 1 2 1
+Genotype: 2 3
+# HLA: 6 # Geno: 2 # HLA+Genotype combo coverage: 8/12 = 0.66667
+
+peptide 	i_score 	score 	hlacov_I 	hlacov_II 	nhita_I 	nhita_II 	nhitg
+TSGVHTFPAVLQSSG 	0.2096 	0.2096 	0 	0.2096 	0 	1 	1
+SPRLLIKYASESMSG 	0.2096 	20.9647 	0 	0.2096 	0 	1 	1
+EKGLEWVAEIRSKSI 	0.129 	12.9048 	0 	0.129 	0 	1 	1
+YEKHKVYACEVTHQG 	0.0969 	9.9184 	0 	0.0969 	0 	3 	1
+KLEESGGGLVQPGGS 	0.0537 	5.4368 	0 	0.0537 	0 	2 	1
+
+
+Population coverage - PopCover method
+
+MHC class II
+Locus DRB1 has coverage 0.3116
+Locus HLA-DQ has coverage 0.1291
+Coverage across loci in MHC class II: 0.4005
+
+-- Number of covering peptides per allele --
+DRB1_1101 	1
+DRB1_1501 	2
+HLA-DQA10103-DQB10301 	1
+HLA-DQA10201-DQB10202 	1
+HLA-DQA10401-DQB10301 	2
+HLA-DQA10501-DQB10201 	1
+
+-- Number of covering peptides per genotype --
+4G3Y_1_Chain 	2
+4G3Y_2_Chain 	3
