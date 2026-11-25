@@ -16,6 +16,7 @@ from pathlib import Path
 from urllib.parse import urlencode
 
 QUERY_ALLELES = [
+    'DRB1_0301', 'DRB1_0401', 'DRB1_0701',
     'DRB1_1101', 'DRB1_1501', 'HLA-DQA10103-DQB10301',
     'HLA-DQA10201-DQB10202', 'HLA-DQA10401-DQB10301',
     'HLA-DQA10501-DQB10201',

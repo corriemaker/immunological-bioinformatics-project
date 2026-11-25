@@ -6,7 +6,11 @@ awk '$1 ~ /^[0-9]+$/ && $9 <= 1 {print $3, $2, substr($7,1,12), $5}' \
 awk '$1 ~ /^[0-9]+$/ && $9 <= 1 {print $2}' \
     full_allele_list_netMHCIIpan_out.txt | sort | uniq -c
 
-### Output:
+
+### Output
+      2 DRB1_0301
+     18 DRB1_0401
+      6 DRB1_0701
       3 DRB1_1101
       4 DRB1_1501
       2 HLA-DQA10103-DQB10301
@@ -24,3 +28,25 @@ awk '{$3 = 2; print}' popcover_allele_frequencies.txt > popcover_allele_frequenc
 - popcover_inp_classII
 - 4G3Y_1_Chain and 4G3Y_2_Chain (in the "Include protein sequence information (optional)" menu) --- 4G3Y_3_Chain is not the protein but the target so we need to NOT include it 
 Under Additional customization select "Use phenotypic frequencies for calculation"
+
+## Step 4) Find the cores - Stand in the `03_MHCII peptides predicted` folder
+awk '
+BEGIN {
+    print "Peptide", "HLA", "Core", "Rank_EL", "Score_BA", "Affinity_nM", "Chain"
+}
+
+FNR == NR {
+    sub(/\r$/, "")
+    if ($1 == "Selected") {
+        peptides[$2] = 1
+    }
+    next
+}
+
+$1 ~ /^[0-9]+$/ && ($3 in peptides) && $9 <= 1 {
+    print $3, $2, $5, $9, $12, $13, $7
+}
+' PopCover_results/pop_cover_out.txt full_allele_list_netMHCIIpan_out.txt > selected_peptide_cores.txt
+
+## Step 5) look at step 4 output in a nice format
+column -t selected_peptide_cores.txt | less -S
