@@ -206,6 +206,15 @@ def main():
                     help="Restrict core lookup to this FASTA identifier")
     ap.add_argument("--mutants", choices=["single", "combined", "both"], default="both",
                     help="Which mutated chains to emit (default: both)")
+    ap.add_argument("--id-style", choices=["short", "descriptive"], default="short",
+                    help="FASTA record naming. 'short' (default) writes WT1/WT2 and "
+                         "M01, M02, ... because NetMHCIIpan truncates the Identity "
+                         "field at 15 characters, which silently merges descriptive "
+                         "names into one record. 'descriptive' writes "
+                         "<chain>__<substitutions>; only safe if the FASTA is not "
+                         "going through NetMHCIIpan.")
+    ap.add_argument("--id-prefix", default="M",
+                    help="Prefix for short mutant ids (default: M)")
     ap.add_argument("--no-wt", action="store_true",
                     help="Omit the unmutated parent chains from the FASTA output "
                          "(they are included by default as a NetMHCIIpan baseline)")
@@ -293,6 +302,13 @@ def main():
                      f"(FASTA has: {', '.join(sequences)})")
 
     anchor_rows, fasta_records, map_rows, problems = [], [], [], []
+    counter = {"n": 0}
+    if sequences is None:
+        wt_ids = {}
+    elif args.id_style == "short":
+        wt_ids = {c: f"WT{i}" for i, c in enumerate(sequences, 1)}
+    else:
+        wt_ids = {c: f"WT__{c}" for c in sequences}
 
     for core, core_chain in cores:
         try:
@@ -326,10 +342,17 @@ def main():
 
         def emit(mut_core, label, detail):
             seq = parent[:start] + mut_core + parent[start + 9:]
-            header = f"{chain}__{label}"
+            descriptive = f"{chain}__{label}"
+            if args.id_style == "short":
+                counter["n"] += 1
+                header = f"{args.id_prefix}{counter['n']:02d}"
+            else:
+                header = descriptive
             fasta_records.append((header, seq))
             map_rows.append({
                 "record_id": header,
+                "label": descriptive,
+                "wt_record_id": wt_ids[chain],
                 "chain": chain,
                 "core_wt": core,
                 "core_mutant": mut_core,
@@ -352,7 +375,7 @@ def main():
     # ----------------------------------------------------------------- output
     if sequences is not None:
         if not args.no_wt:
-            wt_records = [(f"WT__{c}", s) for c, s in sequences.items()]
+            wt_records = [(wt_ids[c], s) for c, s in sequences.items()]
             fasta_records = wt_records + fasta_records
 
         if not fasta_records:
@@ -360,8 +383,12 @@ def main():
         elif args.split:
             outdir = Path(args.outdir)
             ext = args.ext.lstrip(".")
+            labels = {r["record_id"]: r["label"] for r in map_rows}
             for header, seq in fasta_records:
-                write_fasta(outdir / f"{header}.{ext}", [(header, seq)])
+                stem = header
+                if header in labels and labels[header] != header:
+                    stem = f"{header}_{labels[header]}"
+                write_fasta(outdir / f"{stem}.{ext}", [(header, seq)])
             print(f"\nWrote {len(fasta_records)} files to {outdir}/ (.{ext})")
         else:
             out = Path(args.out_fasta)
