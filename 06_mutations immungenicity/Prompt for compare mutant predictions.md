@@ -1,4 +1,4 @@
-python compare_mutant_predictions.py \
+python3 compare_mutant_predictions.py \
     --predictions netMHCIIpan_mutants_out.txt \
     --map mutants.tsv \
     --threshold 2.0 \
