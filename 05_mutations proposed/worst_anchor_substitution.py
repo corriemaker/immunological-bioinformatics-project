@@ -180,8 +180,18 @@ def main():
     src = ap.add_mutually_exclusive_group(required=True)
     src.add_argument("--core", help="A single 9-mer binding core, e.g. SGGGLVQPG")
     src.add_argument("--cores-file",
-                     help="File of cores, one per line; first whitespace field is used, "
-                          "'#' comments and blank lines ignored")
+                     help="Whitespace- or tab-separated file of binder rows. By default "
+                          "the first field of each line is taken as the core; use "
+                          "--core-column for a different layout. A header line is skipped "
+                          "automatically. '#' comments and blank lines are ignored.")
+
+    ap.add_argument("--core-column", type=int, default=1,
+                    help="1-based column holding the 9-mer core in --cores-file "
+                         "(default: 1)")
+    ap.add_argument("--chain-column", type=int,
+                    help="1-based column holding the FASTA identifier for each row. "
+                         "If given, each core is mutated in that chain instead of being "
+                         "searched for across the whole FASTA.")
 
     ap.add_argument("--anchors", default="1,4,6,9",
                     help="1-based anchor positions within the core (default: 1,4,6,9)")
@@ -230,17 +240,46 @@ def main():
     if not allowed:
         ap.error("--exclude leaves no replacement residues")
 
+    if args.core_column < 1 or (args.chain_column is not None and args.chain_column < 1):
+        ap.error("--core-column and --chain-column are 1-based")
+
+    def looks_like_core(text):
+        return len(text) == 9 and not (set(text.upper()) - set(AA))
+
+    pairs = []  # (core, chain_or_None), in file order
     if args.core:
-        cores = [args.core]
+        pairs.append((args.core.upper(), args.chain))
     else:
-        cores = []
-        for line in Path(args.cores_file).read_text().splitlines():
+        raw_lines = Path(args.cores_file).read_text().splitlines()
+        for line_no, line in enumerate(raw_lines, 1):
             line = line.strip()
-            if line and not line.startswith("#"):
-                cores.append(line.split()[0])
-        if not cores:
-            ap.error(f"no cores found in {args.cores_file}")
-    cores = list(dict.fromkeys(c.upper() for c in cores))
+            if not line or line.startswith("#"):
+                continue
+            fields = line.split()
+            if len(fields) < args.core_column:
+                print(f"line {line_no}: only {len(fields)} column(s), need "
+                      f"{args.core_column}; skipped", file=sys.stderr)
+                continue
+            core = fields[args.core_column - 1].upper()
+            if not pairs and not looks_like_core(core):
+                print(f"Skipping header line: {line}", file=sys.stderr)
+                continue
+            chain = args.chain
+            if args.chain_column is not None:
+                if len(fields) < args.chain_column:
+                    print(f"line {line_no}: no column {args.chain_column}; skipped",
+                          file=sys.stderr)
+                    continue
+                chain = fields[args.chain_column - 1]
+            pairs.append((core, chain))
+        if not pairs:
+            ap.error(f"no cores found in {args.cores_file} at column {args.core_column}")
+
+    seen, cores = set(), []
+    for core, chain in pairs:
+        if (core, chain) not in seen:
+            seen.add((core, chain))
+            cores.append((core, chain))
 
     sequences = None
     if args.fasta:
@@ -248,13 +287,14 @@ def main():
             sequences = read_fasta(args.fasta)
         except (OSError, ValueError) as exc:
             ap.error(f"could not read --fasta: {exc}")
-        if args.chain and args.chain not in sequences:
-            ap.error(f"--chain {args.chain!r} is not in the FASTA "
-                     f"({', '.join(sequences)})")
+        unknown = sorted({c for _, c in cores if c and c not in sequences})
+        if unknown:
+            ap.error(f"chain identifier(s) not in the FASTA: {', '.join(unknown)} "
+                     f"(FASTA has: {', '.join(sequences)})")
 
     anchor_rows, fasta_records, map_rows, problems = [], [], [], []
 
-    for core in cores:
+    for core, core_chain in cores:
         try:
             rows, combined_core = process_core(core, anchors, allowed)
         except ValueError as exc:
@@ -275,7 +315,7 @@ def main():
             continue
 
         try:
-            chain, start = locate_core(sequences, core, args.chain)
+            chain, start = locate_core(sequences, core, core_chain)
         except ValueError as exc:
             problems.append(str(exc))
             print(f"  !! no FASTA output: {exc}")
