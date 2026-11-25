@@ -6424,4 +6424,7 @@ Number of strong binders: 0 Number of weak binders: 4
  197   HLA-DQA10101-DQB10501      THQGLSSPVTKSFNR    1   HQGLSSPVT     0.240    4G3Y_1_Chain      0.000495    87.45       NA      0.078229      21447.38    90.61       
  198   HLA-DQA10101-DQB10501      HQGLSSPVTKSFNRG    6   PVTKSFNRG     0.227    4G3Y_1_Chain      0.000360    92.20       NA      0.069869      23477.81    92.91       
  199   HLA-DQA10101-DQB10501      QGLSSPVTKSFNRGE    5   PVTKSFNRG     0.327    4G3Y_1_Chain      0.000440    89.45       NA      0.073221      22641.58    91.98       
- 200   HLA-DQA10101-DQB10501      GLSSPVTKSFNRGEC    4   PVTKSFNRG     0.307    4G3Y_1_Chain      0.000362    92.13       NA      0.075667      22050.23    91.31 
+ 200   HLA-DQA10101-DQB10501      GLSSPVTKSFNRGEC    4   PVTKSFNRG     0.307    4G3Y_1_Chain      0.000362    92.13       NA      0.075667      22050.23    91.31       
+--------------------------------------------------------------------------------------------------------------------------------------------
+Number of strong binders: 0 Number of weak binders: 3
+--------------------------------------------------------------------------------------------------------------------------------------------
