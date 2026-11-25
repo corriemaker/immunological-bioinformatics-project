@@ -199,8 +199,12 @@ def main():
 
     summary, details, warnings = [], [], []
 
+    def wt_id_for(entry):
+        """Prefer the explicit wt_record_id column; fall back to the old scheme."""
+        return entry.get("wt_record_id") or f"WT__{entry['chain']}"
+
     wanted = [e["record_id"] for e in mapping]
-    wanted += sorted({f"WT__{e['chain']}" for e in mapping})
+    wanted += sorted({wt_id_for(e) for e in mapping})
     resolved, id_problems = resolve_identities(wanted, identities)
     warnings.extend(id_problems)
 
@@ -208,13 +212,15 @@ def main():
         rec_id = entry["record_id"]
         chain = entry["chain"]
 
+        label = entry.get("label") or rec_id
+        wt_id = wt_id_for(entry)
         mut_key = resolved.get(rec_id)
-        wt_key = resolved.get(f"WT__{chain}")
+        wt_key = resolved.get(wt_id)
         if mut_key is None:
-            warnings.append(f"{rec_id}: no matching record in the prediction output")
+            warnings.append(f"{label}: no record {rec_id!r} in the prediction output")
             continue
         if wt_key is None:
-            warnings.append(f"{rec_id}: no WT__{chain} record in the prediction output")
+            warnings.append(f"{label}: no record {wt_id!r} in the prediction output")
             continue
 
         try:
@@ -276,6 +282,7 @@ def main():
                 status = "retained"
             details.append({
                 "record_id": rec_id,
+                "label": label,
                 "chain": chain,
                 "allele": mhc,
                 "status": status,
@@ -291,6 +298,7 @@ def main():
         mut_best = min((r[metric] for r in best_mut.values()), default=None)
         summary.append({
             "record_id": rec_id,
+            "label": label,
             "chain": chain,
             "substitutions": entry["substitutions"],
             "n_substitutions": entry.get("n_substitutions", ""),
@@ -327,7 +335,7 @@ def main():
             note = s["retained_alleles"]
             if s["new_alleles"]:
                 note = (note + " / " if note else "") + "NEW:" + s["new_alleles"]
-            print(f"  {s['record_id']:<38} {s['verdict']:<9} "
+            print(f"  {s['label'][:38]:<38} {s['verdict']:<9} "
                   f"{s['best_wt_rank']:>6} {s['best_mut_rank']:>6}  {note}")
 
     if args.out and summary:
