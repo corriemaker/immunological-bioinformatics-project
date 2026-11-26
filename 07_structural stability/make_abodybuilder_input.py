@@ -82,6 +82,12 @@ def main():
                     help="step6 summary TSV; selects CLEARED rows with no new binders")
     ap.add_argument("--include-cdr", action="store_true",
                     help="With --summary, keep hits inside a CDR (excluded by default)")
+    ap.add_argument("--full-chain", action="store_true",
+                    help="Pass whole chains (VH+CH1, VL+CL) instead of trimming to the "
+                         "variable domain. ABodyBuilder runs ANARCI and extracts the Fv "
+                         "itself, so this usually gives the same model; the pairing of "
+                         "heavy with light is what actually matters. Mutations outside "
+                         "the variable domain are still refused.")
     ap.add_argument("--outdir", default="abodybuilder_input")
     args = ap.parse_args()
 
@@ -89,19 +95,20 @@ def main():
     with open(args.mapfile, newline="") as fh:
         mapping = {r["record_id"]: r for r in csv.DictReader(fh, delimiter="\t")}
 
-    # wild-type variable domains
+    # wild-type sequences, trimmed to the variable domain unless --full-chain
     wt = {}
     for chain, end, tail in ((HEAVY_CHAIN, VH_END, VH_TAIL), (LIGHT_CHAIN, VL_END, VL_TAIL)):
         wt_id = next((r["wt_record_id"] for r in mapping.values()
                       if r["chain"] == chain and r.get("wt_record_id")), None)
         if wt_id is None or wt_id not in seqs:
             sys.exit(f"No wild-type record for {chain} in {args.fasta}")
-        domain = seqs[wt_id][:end]
-        if not domain.endswith(tail):
+        full = seqs[wt_id]
+        if not full[:end].endswith(tail):
             sys.exit(f"{chain}: residues 1-{end} do not end in {tail!r} -- "
                      "the variable-domain boundary is wrong for this FASTA")
-        wt[chain] = domain
-    print(f"WT domains verified: VH {len(wt[HEAVY_CHAIN])} aa, VL {len(wt[LIGHT_CHAIN])} aa")
+        wt[chain] = full if args.full_chain else full[:end]
+    mode = "full chains" if args.full_chain else "variable domains"
+    print(f"WT {mode}: H {len(wt[HEAVY_CHAIN])} aa, L {len(wt[LIGHT_CHAIN])} aa")
 
     # which records
     if args.records:
@@ -136,11 +143,11 @@ def main():
             continue
 
         chain = entry["chain"]
-        end = VH_END if chain == HEAVY_CHAIN else VL_END
-        mutated = seqs[rec][:end]
+        vend = VH_END if chain == HEAVY_CHAIN else VL_END
+        mutated = seqs[rec] if args.full_chain else seqs[rec][:vend]
 
         pos = int(re.search(r"\d+", entry["substitutions"]).group())
-        if pos > end:
+        if pos > vend:
             print(f"{rec}: substitution at {pos} is outside the variable domain; "
                   "skipped", file=sys.stderr)
             continue
