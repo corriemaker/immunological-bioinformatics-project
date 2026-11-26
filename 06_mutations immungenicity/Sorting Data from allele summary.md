@@ -27,8 +27,8 @@ awk -F'\t' '
 NR==1 { next }
 $8=="CLEARED" && $12==0 {
   match($4,/[0-9]+/); p = substr($4,RSTART,RLENGTH)+0
-  if ($3 ~ /1_Chain/) { lim=107; cdr=(p>=24&&p<=34)||(p>=50&&p<=56)||(p>=89&&p<=97) }
-  else                { lim=120; cdr=(p>=31&&p<=35)||(p>=50&&p<=65)||(p>=95&&p<=109) }
+  if ($3 ~ /1_Chain/) { lim=107; cdr=(p>=27&&p<=38)||(p>=56&&p<=65)||(p>=105&&p<=117) }
+  else                { lim=120; cdr=(p>=27&&p<=38)||(p>=56&&p<=65)||(p>=105&&p<=117) }
   if (p<=lim) printf "%-38s %-12s %4d %-10s %4s %8s %8s\n", $2, $3, p, (cdr?"CDR":"framework"), $9, $13, $14
 }' step6_summary.tsv | sort -k5,5nr -k7,7nr
 ```
