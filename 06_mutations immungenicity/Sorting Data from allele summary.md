@@ -37,8 +37,7 @@ $8=="CLEARED" && $12==0 {
 label                                  chain         pos region      tgt   WTrank  MUTrank
 4G3Y_2_Chain__V12D                     4G3Y_2_Chain   12 framework     2     0.12    11.87
 4G3Y_2_Chain__S7W_G10I_V12D_G15I       4G3Y_2_Chain    7 framework     2     0.12     6.47
-4G3Y_2_Chain__D87L                     4G3Y_2_Chain   87 framework     1     0.29     5.79
-4G3Y_2_Chain__R52F                     4G3Y_2_Chain   52 CDR           1     0.33     4.63
+4G3Y_2_Chain__D87L                     4G3Y_2_Chain   87 framework     1     0.29     5.79xcvbnm,.-04´+G3Y_2_Chain__R52F                     4G3Y_2_Chain   52 CDR           1     0.33     4.63
 4G3Y_2_Chain__T90F                     4G3Y_2_Chain   90 framework     1     0.29     3.64
 4G3Y_1_Chain__S52W                     4G3Y_1_Chain   52 CDR           1     0.28     3.40
 ```
