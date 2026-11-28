@@ -1,0 +1,12 @@
+FoldX 5 (2011)
+by the FoldX Consortium 
+Jesper Borg, Frederic Rousseau, Joost Schymkowitz,
+Luis Serrano and Francois Stricher
+------------------------------------------------------
+
+PDB file analysed: batch
+Output type: AnalyseComplex
+Pdb	Group1	Group2	IntraclashesGroup1	IntraclashesGroup2	Interaction Energy	Backbone Hbond	Sidechain Hbond	Van der Waals	Electrostatics	Solvation Polar	Solvation Hydrophobic	Van der Waals clashes	entropy sidechain	entropy mainchain	sloop_entropy	mloop_entropy	cis_bond	torsional clash	backbone clash	helix dipole	water bridge	disulfide	electrostatic kon	partial covalent bonds	energy Ionisation	Entropy Complex	Number of Residues	Interface Residues	Interface Residues Clashing	Interface Residues VdW Clashing	Interface Residues BB Clashing
+./WT_inflixumab_tnf_model0_checked_Repair_2_4.pdb	C	H	26.6917	35.7319	-5.31218	-1.23718	-1.85882	-7.96742	-2.35087	11.2347	-9.08292	0.72545	2.54479	2.60496	0	0	-4.44089e-16	0.396602	0.75475	0	0	0	-0.34116	0	0.0196916	2.384	581	33	0	0	0
+./WT_inflixumab_tnf_model0_checked_Repair_2_4.pdb	C	L	26.69	26.86	-4.68801	-1.86455	-0.49207	-8.04392	-0.787719	10.6427	-9.74544	0.625489	2.13629	2.70178	0	0	-4.44089e-16	0.110895	1.2477	0	0	0	-0.0734686	0	0.101988	2.384	581	23	0	0	0
+./WT_inflixumab_tnf_model0_checked_Repair_2_4.pdb	H	L	35.73	26.86	-33.8471	-3.13748	-7.79647	-26.5082	-1.36367	25.6264	-37.3721	1.52098	9.86266	5.28572	0	0	-8.88178e-16	0.345909	1.3348	0	0	-1.77636e-15	-0.346683	0	0.0357999	2.384	581	90	0	0	0
