@@ -30,16 +30,16 @@ $8=="CLEARED" && $12==0 {
   if ($3 ~ /1_Chain/) { lim=107; cdr=(p>=27&&p<=38)||(p>=50&&p<=52)||(p>=89&&p<=97) }
   else                { lim=120; cdr=(p>=27&&p<=33)||(p>=51&&p<=59)||(p>=99&&p<=109) }
   if (p<=lim) printf "%-38s %-12s %4d %-10s %4s %8s %8s\n", $2, $3, p, (cdr?"CDR":"framework"), $9, $13, $14
-}' step6_summary.tsv | sort -k5,5nr -k7,7nr
+}' step6_pssm_summary.tsv | sort -k5,5nr -k7,7nr
 ```
 
 ```
 label                                  chain         pos region      tgt   WTrank  MUTrank
-4G3Y_2_Chain__V12D                     4G3Y_2_Chain   12 framework     2     0.12    11.87
-4G3Y_2_Chain__S7W_G10I_V12D_G15I       4G3Y_2_Chain    7 framework     2     0.12     6.47
-4G3Y_2_Chain__D87L                     4G3Y_2_Chain   87 framework     1     0.29     5.79xcvbnm,.-04´+G3Y_2_Chain__R52F                     4G3Y_2_Chain   52 CDR           1     0.33     4.63
-4G3Y_2_Chain__T90F                     4G3Y_2_Chain   90 framework     1     0.29     3.64
-4G3Y_1_Chain__S52W                     4G3Y_1_Chain   52 CDR           1     0.28     3.40
+4G3Y_2_Chain__V12D                     4G3Y_2_Chain   12 framework     2     0.06     7.67
+4G3Y_2_Chain__D87M                     4G3Y_2_Chain   87 framework     2     0.26     6.80
+4G3Y_2_Chain__T90W                     4G3Y_2_Chain   90 framework     2     0.26     5.68
+4G3Y_1_Chain__Y50Q                     4G3Y_1_Chain   50 CDR           1     0.15     5.82
+4G3Y_1_Chain__L47R                     4G3Y_1_Chain   47 framework     1     0.15     2.35
 ```
 
 **Four framework candidates to carry into step 7** — that's your actual result. `V12D` is the standout: two alleles cleared, rank 0.12 → 11.87, VH framework 1, nowhere near the paratope.
