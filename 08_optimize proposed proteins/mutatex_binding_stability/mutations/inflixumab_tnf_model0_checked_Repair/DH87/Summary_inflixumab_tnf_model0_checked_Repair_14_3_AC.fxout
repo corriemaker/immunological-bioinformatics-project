@@ -1,0 +1,12 @@
+FoldX 5 (2011)
+by the FoldX Consortium 
+Jesper Borg, Frederic Rousseau, Joost Schymkowitz,
+Luis Serrano and Francois Stricher
+------------------------------------------------------
+
+PDB file analysed: batch
+Output type: AnalyseComplex
+Pdb	Group1	Group2	IntraclashesGroup1	IntraclashesGroup2	Interaction Energy	StabilityGroup1	StabilityGroup2
+./inflixumab_tnf_model0_checked_Repair_14_3.pdb	C	H	26.6917	35.9322	-5.31509	30.5447	67.7338
+./inflixumab_tnf_model0_checked_Repair_14_3.pdb	C	L	26.6917	26.8432	-4.68801	30.5447	42.9271
+./inflixumab_tnf_model0_checked_Repair_14_3.pdb	H	L	35.9322	26.8432	-33.8466	67.7338	42.9271

@@ -1,0 +1,8 @@
+command=AnalyseComplex
+pdb-list=PdbList_inflixumab_tnf_model0_checked_Repair.fxout
+water=-CRYSTAL
+temperature=298
+pH=7
+ionStrength=0.050
+vdwDesign=2
+pdbHydrogens=false
